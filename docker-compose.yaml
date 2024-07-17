@@ -1,0 +1,28 @@
+version: '3.8'
+
+services:
+  mysql:
+    image: mysql:latest
+    restart: always
+    environment:
+      MYSQL_DATABASE: 'infilon'
+      MYSQL_USER: 'ankit'
+      MYSQL_PASSWORD: 'password'
+      MYSQL_ROOT_PASSWORD: 'password'
+    ports:
+      - '3306:3306'  # Expose MySQL port
+
+  go-app:
+    build:
+      context: .
+      dockerfile: DockerFile  # Specify the Dockerfile to use for building go-app
+    ports:
+      - '8080:8080'  # Expose Go application port
+    depends_on:
+      - mysql
+    environment:
+      DB_HOST: mysql
+      DB_PORT: '3306'
+      DB_USER: 'ankit'  # Update with your MySQL user
+      DB_PASSWORD: 'password'  # Update with your MySQL password
+      DB_NAME: 'infilon'  # Update with your MySQL database name
